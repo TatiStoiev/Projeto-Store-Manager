@@ -3,6 +3,8 @@ const {ProductsRouter} = require('./routes/index')
 
 const app = express();
 
+app.use(express.json());
+
 app.use(ProductsRouter);
 
 // não remova esse endpoint, é para o avaliador funcionar
