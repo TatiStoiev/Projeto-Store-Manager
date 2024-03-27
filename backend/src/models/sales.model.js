@@ -26,7 +26,7 @@ const findById = async (productId) => {
   WHERE s.id = ?`;
   const value = [productId];
   const [[product]] = await connection.execute(query, value);
-  return product;
+  return camelize(product);
 };
 
 module.exports = {
