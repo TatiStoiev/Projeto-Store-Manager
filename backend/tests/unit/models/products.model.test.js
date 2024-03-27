@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const connection = require('../../../src/db/connection');
 const { productsModel } = require('../../../src/models/index');
+const { productsControlers } = require('../../../src/controllers/index');
 
 const productsMock = [
   {
@@ -26,7 +27,7 @@ describe('Products', function () {
     sinon.restore();
   });
 
-  it('Must return all products', async function () {
+  it('Should return all products', async function () {
     sinon.stub(connection, 'execute')
       .resolves([productsMock]);
 
@@ -36,7 +37,7 @@ describe('Products', function () {
     expect(products).to.be.deep.equal(productsMock);
   });
     
-  it('Must return product by id', async function () {
+  it('Should return product by id', async function () {
     sinon.stub(connection, 'execute')
       .resolves([[idMock]]);
 
@@ -46,13 +47,18 @@ describe('Products', function () {
     expect(product).to.be.deep.equal(returnIdMock);
   });
 
-  it('Must return error when id does not exists', async function () {
-    sinon.stub(connection, 'execute')
-      .resolves([[]]);
-
-    const invalidId = 99;
-    const product = await productsModel.findById(invalidId);      
-    // eslint-disable-next-line no-unused-expressions
-    expect(product).to.be.undefined;     
+  it('Should return error when id does not exists', async function () {
+    sinon.stub(productsModel, 'findById').resolves(null);
+  
+    const req = { params: { id: 99 } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+  
+    await productsControlers.findbyId(req, res);
+  
+    sinon.assert.calledWith(res.status, 404);
+    sinon.assert.calledWith(res.json, { message: 'Product not found' });
   });
 });

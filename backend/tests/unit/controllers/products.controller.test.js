@@ -10,7 +10,7 @@ chai.use(sinonChai);
 describe('Products controller', function () {
   afterEach(function () { return sinon.restore(); });
 
-  it('Must return status 200 and the products json', async function () {
+  it('Should return status 200 and the products json', async function () {
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
@@ -51,7 +51,7 @@ describe('Products controller', function () {
     ]));      
   });
 
-  it('Must return status 200 and the product json when find by id', async function () {
+  it('Should return status 200 and the product json when find by id', async function () {
     const req = {
       params: {
         id: 3,
@@ -78,7 +78,7 @@ describe('Products controller', function () {
     })).to.be.equal(true);
   });
 
-  it('Must return status 404 and the message "Product not found" when id does not exist', async function () {
+  it('Should return status 404 and the message "Product not found" when id does not exist', async function () {
     const req = {
       params: {
         id: 99,
