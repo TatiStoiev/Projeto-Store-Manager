@@ -1,12 +1,14 @@
 const express = require('express')
+const {productsModel} = require('../models/index')
 
-const router = express.Router();
+const ProductsRouter = express.Router();
 
-router.get('/products', (req, res) => {
-    
+ProductsRouter.get('/products', async (req, res) => {
+    const products = await productsModel.findAll()
+    res.status(200).json(products);
 })
 
 
 // router.get('/products/:id')
 
-module.exports = router;
+module.exports = ProductsRouter;
