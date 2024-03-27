@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const connection = require('../../../src/db/connection');
 const {productsModel} = require('../../../src/models/index')
 
+
 const productsMock = [
     {
       "id": 1,
