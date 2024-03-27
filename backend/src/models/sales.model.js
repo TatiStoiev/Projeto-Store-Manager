@@ -15,17 +15,17 @@ const findAll = async () => {
   return camelize(products);    
 };
 
-const findById = async (productId) => {
+const findById = async (saleId) => {
   const query = `SELECT
-  s.date,
   sp.product_id, 
-  sp.quantity
+  sp.quantity,
+  s.date
   FROM sales_products sp 
   JOIN sales s 
   ON sp.sale_id = s.id 
   WHERE s.id = ?`;
-  const value = [productId];
-  const [[product]] = await connection.execute(query, value);
+  const value = [saleId];
+  const [product] = await connection.execute(query, value);
   return camelize(product);
 };
 
