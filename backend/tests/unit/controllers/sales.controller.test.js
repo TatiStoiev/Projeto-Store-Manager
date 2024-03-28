@@ -10,7 +10,7 @@ chai.use(sinonChai);
 const notFoundMessage = 'Sale not found';
 
 describe('Sales controller', function () {
-  describe('return status 200', function () {
+  describe('Test response status 200', function () {
     afterEach(function () { return sinon.restore(); });
   
     it('Should return status 200 and the sales json', async function () {
@@ -112,17 +112,32 @@ describe('Sales controller', function () {
     });
   });
 
-  describe('Sales Return status 404', function () {
+  describe('Test response status 404', function () {
     afterEach(function () { return sinon.restore(); });
 
-    it('should return status 404 and the message "Sale not found" if saleId does not exist', async function () {
-      const req = { params: { id: 1 } };
+    it('should return status 404 and the message "Sale not found" if saleId is a number but does not exist', async function () {
+      const req = { params: { id: 3 } };
       const res = {
         status: sinon.stub().returnsThis(),
         json: sinon.stub(),
       };
 
-      sinon.stub(salesModel, 'findById').resolves(false);
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      await salesControllers.findbyId(req, res);
+
+      expect(res.status).to.be.calledWith(404);
+      expect(res.json).to.be.calledWith({ message: notFoundMessage });
+    });
+
+    it('should return status 404 and the message "Sale not found" if saleId is not a number', async function () {
+      const req = { params: { id: 'xablau' } };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      sinon.stub(salesModel, 'findById').resolves([]);
 
       await salesControllers.findbyId(req, res);
 
@@ -144,15 +159,5 @@ describe('Sales controller', function () {
       expect(res.status).to.be.calledWith(404);
       expect(res.json).to.be.calledWith({ message: notFoundMessage });
     });
-
-    it('should return false if saleId does not exist', async function () {
-      const saleId = 3;
-
-      sinon.stub(salesModel, 'findById').resolves(null);
-
-      const result = await salesControllers.salesIdExists(saleId);
-
-      expect(result).to.be.equal(false);
-    });  
   });
 });
