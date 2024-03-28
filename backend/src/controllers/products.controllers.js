@@ -15,11 +15,11 @@ const findbyId = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const productName = req.params.body;
+  const productName = req.body.name;
   const productId = await productsModel.createProduct(productName);
   const productCreated = {
     id: productId,
-    ...productName,
+    name: productName,
   };
   return res.status(201).json(productCreated);
 };
