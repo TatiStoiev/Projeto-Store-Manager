@@ -7,78 +7,97 @@ const { salesControllers } = require('../../../src/controllers/index');
 
 chai.use(sinonChai);
 
-describe('Sales controller', function () {
-  afterEach(function () { return sinon.restore(); });
-  
-  it('Should return status 200 and the sales json', async function () {
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+const notFoundMessage = 'Sale not found';
 
-    const informedDate = '2024-03-27T19:53:56.000Z';
+describe('Sales controller', function () {
+  describe('return status 200', function () {
+    afterEach(function () { return sinon.restore(); });
   
-    sinon.stub(salesModel, 'findAll')
-      .resolves([
+    it('Should return status 200 and the sales json', async function () {
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      const informedDate = '2024-03-27T19:53:56.000Z';
+  
+      sinon.stub(salesModel, 'findAll')
+        .resolves([
+          {
+            saleId: 1,
+            date: informedDate,
+            productId: 1,
+            quantity: 5,
+          },
+          {
+            saleId: 1,
+            date: informedDate,
+            productId: 2,
+            quantity: 10,
+          },
+          {
+            saleId: 2,
+            date: informedDate,
+            productId: 3,
+            quantity: 15,
+          },
+        ]);
+    
+      await salesControllers.findAll({}, res);     
+           
+      expect(res.status.calledWith(200)).to.be.equal(true);
+      expect(res.json.calledWith([
         {
           saleId: 1,
-          date: informedDate,
+          date: '2024-03-27T19:53:56.000Z',
           productId: 1,
           quantity: 5,
         },
         {
           saleId: 1,
-          date: informedDate,
+          date: '2024-03-27T19:53:56.000Z',
           productId: 2,
           quantity: 10,
         },
         {
           saleId: 2,
-          date: informedDate,
+          date: '2024-03-27T19:53:56.000Z',
           productId: 3,
           quantity: 15,
         },
-      ]);
-    
-    await salesControllers.findAll({}, res);     
-           
-    expect(res.status.calledWith(200)).to.be.equal(true);
-    expect(res.json.calledWith([
-      {
-        saleId: 1,
-        date: '2024-03-27T19:53:56.000Z',
-        productId: 1,
-        quantity: 5,
-      },
-      {
-        saleId: 1,
-        date: '2024-03-27T19:53:56.000Z',
-        productId: 2,
-        quantity: 10,
-      },
-      {
-        saleId: 2,
-        date: '2024-03-27T19:53:56.000Z',
-        productId: 3,
-        quantity: 15,
-      },
-    ]));      
-  });
+      ]));      
+    });
   
-  it('Should return status 200 and the sale json when find by id', async function () {
-    const req = {
-      params: {
-        id: 1,
-      },
-    };   
+    it('Should return status 200 and the sale json when find by id', async function () {
+      const req = {
+        params: {
+          id: 1,
+        },
+      };   
   
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
   
-    sinon.stub(salesModel, 'findById')
-      .resolves([
+      sinon.stub(salesModel, 'findById')
+        .resolves([
+          {
+            productId: 1,
+            quantity: 5,
+            date: '2024-03-27T19:41:01.000Z',
+          },
+          {
+            productId: 2,
+            quantity: 10,
+            date: '2024-03-27T19:41:01.000Z',
+          },
+        ]);
+  
+      await salesControllers.findbyId(req, res);   
+         
+      expect(res.status.calledWith(200)).to.be.equal(true);
+      expect(res.json.calledWith([
         {
           productId: 1,
           quantity: 5,
@@ -89,43 +108,51 @@ describe('Sales controller', function () {
           quantity: 10,
           date: '2024-03-27T19:41:01.000Z',
         },
-      ]);
-  
-    await salesControllers.findbyId(req, res);   
-         
-    expect(res.status.calledWith(200)).to.be.equal(true);
-    expect(res.json.calledWith([
-      {
-        productId: 1,
-        quantity: 5,
-        date: '2024-03-27T19:41:01.000Z',
-      },
-      {
-        productId: 2,
-        quantity: 10,
-        date: '2024-03-27T19:41:01.000Z',
-      },
-    ])).to.be.equal(true);
+      ])).to.be.equal(true);
+    });
   });
-  
-  it('Should return status 404 and the message "Product not found" when id does not exist', async function () {
-    const req = {
-      params: {
-        id: 99,
-      },
-    };   
-  
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-  
-    sinon.stub(salesModel, 'findById')
-      .resolves(undefined);
-  
-    await salesControllers.findbyId(req, res);   
-         
-    expect(res.status.calledWith(404)).to.be.equal(true); 
-    expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+
+  describe('Sales Return status 404', function () {
+    afterEach(function () { return sinon.restore(); });
+
+    it('should return status 404 and the message "Sale not found" if saleId does not exist', async function () {
+      const req = { params: { id: 1 } };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      sinon.stub(salesModel, 'findById').resolves(false);
+
+      await salesControllers.findbyId(req, res);
+
+      expect(res.status).to.be.calledWith(404);
+      expect(res.json).to.be.calledWith({ message: notFoundMessage });
+    });
+
+    it('should return status 404 and the message "Sale not found" if saleId exists but sale is empty', async function () {
+      const req = { params: { id: 2 } };
+      const res = {
+        status: sinon.stub().returnsThis(),
+        json: sinon.stub(),
+      };
+
+      sinon.stub(salesModel, 'findById').resolves([]);
+
+      await salesControllers.findbyId(req, res);
+
+      expect(res.status).to.be.calledWith(404);
+      expect(res.json).to.be.calledWith({ message: notFoundMessage });
+    });
+
+    it('should return false if saleId does not exist', async function () {
+      const saleId = 3;
+
+      sinon.stub(salesModel, 'findById').resolves(null);
+
+      const result = await salesControllers.salesIdExists(saleId);
+
+      expect(result).to.be.equal(false);
+    });  
   });
 });

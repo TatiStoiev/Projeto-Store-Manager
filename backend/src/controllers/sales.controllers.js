@@ -27,4 +27,5 @@ const findbyId = async (req, res) => {
 module.exports = {
   findAll,
   findbyId,
+  salesIdExists,
 };
