@@ -1,4 +1,5 @@
 const { productsModel } = require('../models/index');
+const { productsServices } = require('../services/index');
 
 const findAll = async (req, res) => {
   const products = await productsModel.findAll();
@@ -14,13 +15,14 @@ const findbyId = async (req, res) => {
   return res.status(200).json(product);
 };
 
+//acertar o retorno porque os erros são com status diferente
+
 const createProduct = async (req, res) => {
   const productName = req.body.name;
-  const productId = await productsModel.createProduct(productName);
-  const productCreated = {
-    id: productId,
-    name: productName,
-  };
+  const productCreated = await productsServices.createProduct(productName);
+  if (error.code && error.message) {
+    return res.status
+  }
   return res.status(201).json(productCreated);
 };
 
