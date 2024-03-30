@@ -61,4 +61,16 @@ describe('Products', function () {
     sinon.assert.calledWith(res.status, 404);
     sinon.assert.calledWith(res.json, { message: 'Product not found' });
   });
+
+  it('Should create a new product and return the id', async function () {
+    const productId = 4;
+    
+    sinon.stub(connection, 'execute')
+      .resolves([{ insertId: productId }]);
+
+    const productName = 'ProductX';
+
+    const id = await productsModel.createProduct(productName);
+    expect(id).to.be.equal(4);    
+  });
 });
