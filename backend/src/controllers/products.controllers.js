@@ -15,15 +15,14 @@ const findbyId = async (req, res) => {
   return res.status(200).json(product);
 };
 
-//acertar o retorno porque os erros são com status diferente
-
 const createProduct = async (req, res) => {
   const productName = req.body.name;
-  const productCreated = await productsServices.createProduct(productName);
-  if (error.code && error.message) {
-    return res.status
+  try {
+    const productCreated = await productsServices.createProduct(productName);
+    return res.status(201).json(productCreated);
+  } catch (error) {
+    return res.status(error.status).json({ message: error.message });
   }
-  return res.status(201).json(productCreated);
 };
 
 module.exports = {
