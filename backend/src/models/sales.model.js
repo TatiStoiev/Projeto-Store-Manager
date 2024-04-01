@@ -29,7 +29,31 @@ const findById = async (saleId) => {
   return camelize(product);
 };
 
+const getSaleId = async () => {
+  const [{ insertId }] = await connection.execute('INSERT INTO sales (date) VALUES (NOW())');
+  return insertId;
+};
+
+const insertSale = async (array) => {
+  let insertPromises = [];
+  const saleId = await getSaleId();
+  insertPromises = array.map(({ productId, quantity }) => 
+    connection.execute(`INSERT INTO sales_products (sale_id, product_id, quantity) 
+  VALUES (?, ?, ?)`, [saleId, productId, quantity]));
+
+  await Promise.all(insertPromises);
+  const items = array.map(({ productId, quantity }) => ({ productId, quantity }));
+  
+  const sales = {
+    id: saleId,
+    itemsSold: items,
+  };
+  return sales;
+};
+
 module.exports = {
   findAll,
   findById,
+  getSaleId,
+  insertSale,
 };

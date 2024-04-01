@@ -1,4 +1,5 @@
 const { salesModel } = require('../models/index');
+const { salesServices } = require('../services/index');
 
 const findAll = async (req, res) => {
   const sales = await salesModel.findAll();
@@ -15,7 +16,15 @@ const findbyId = async (req, res) => {
   return res.status(200).json(sale);
 };
 
+const createSale = async (req, res) => {
+  const sales = req.body;
+
+  const createdSales = await salesServices.createSales(sales);
+  return res.status(201).json(createdSales);
+};
+
 module.exports = {
   findAll,
   findbyId,
-};
+  createSale,
+}; 
