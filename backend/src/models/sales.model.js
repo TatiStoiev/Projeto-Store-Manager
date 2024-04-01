@@ -54,5 +54,6 @@ const insertSale = async (array) => {
 module.exports = {
   findAll,
   findById,
+  getSaleId,
   insertSale,
 };
