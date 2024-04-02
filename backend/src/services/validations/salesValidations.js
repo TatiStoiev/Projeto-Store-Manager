@@ -19,14 +19,16 @@ const productIdValidation = async (array) => {
 const validations = {
   productId: async (array) => {
     const hasProductId = array.every((product) => 'productId' in product);
-    const productsExists = await productIdValidation(array);
     if (!hasProductId) {
       return createNotValid('"productId" is required', 'REQUIRED');
     }
-    if (!productsExists) {
-      return createNotValid('Product not found', 'PRODUCT_NOTFOUND');
+    if (hasProductId) {
+      const productsExists = await productIdValidation(array);
+      if (!productsExists) {
+        return createNotValid('Product not found', 'PRODUCT_NOTFOUND');
+      }
+      return { isValid: true };
     }
-    return { isValid: true };
   },
   quantity: (array) => {
     const hasQuantity = array.every((product) => 'quantity' in product);
