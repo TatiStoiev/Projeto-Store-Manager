@@ -37,6 +37,8 @@ describe('Sales', function () {
     sinon.stub(salesModel, 'getSaleId').resolves(returnSaleCreated.id);
     sinon.stub(connection, 'execute')
       .resolves([{ insertId: returnSaleCreated.id }]);
+    
+    sinon.stub(salesServices, 'createSales').resolves(returnSaleCreated);
 
     const sale = await salesServices.createSales(insertSaleMock);
   
