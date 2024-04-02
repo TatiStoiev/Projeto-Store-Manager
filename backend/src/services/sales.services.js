@@ -16,8 +16,6 @@ const createSales = async (array) => {
       error: errors.error,
       type: errors.type,
     };
-  
-    console.log('errors na camada service', errors);
     return error;
   } 
   const createSale = await salesModel.insertSale(array);
