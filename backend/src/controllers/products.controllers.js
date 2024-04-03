@@ -36,7 +36,7 @@ const deleteProduct = async (req, res) => {
   const productId = Number(req.params.id);
 
   await productsModel.deleteProduct(productId);
-  return res.status(204);
+  return res.status(204).json();
 };
 
 module.exports = {

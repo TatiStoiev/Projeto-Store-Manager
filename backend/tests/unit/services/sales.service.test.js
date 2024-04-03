@@ -44,4 +44,13 @@ describe('Sales', function () {
   
     expect(sale).to.be.deep.equal(returnSaleCreated);
   });
+  it('Should call insertSale from salesModel with correct argument', async function () {
+    const array = [{ productId: 1, quantity: 2, price: 20 }];
+
+    const insertSaleStub = sinon.stub(salesModel, 'insertSale');
+
+    await salesServices.createSales(array);
+
+    expect(insertSaleStub).to.be.calledOnceWith(array);
+  });
 });
