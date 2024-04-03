@@ -1,6 +1,6 @@
 const { salesModel } = require('../models/index');
 const { salesServices } = require('../services/index');
-const { getCodeByType } = require('../utils/salesUtils');
+const middlewares = require('../middlewares/validateInputMiddleware');
 
 const findAll = async (req, res) => {
   const sales = await salesModel.findAll();
@@ -21,15 +21,8 @@ const createSale = async (req, res) => {
   const sales = req.body;
 
   const createdSales = await salesServices.createSales(sales);
-  
-  if (createdSales.error) {
-    const { error, type } = createdSales;
-    const code = getCodeByType(type);  
-    return res.status(code).json({ message: error });
-  }
-    
   return res.status(201).json(createdSales);
-};
+};  
 
 module.exports = {
   findAll,
