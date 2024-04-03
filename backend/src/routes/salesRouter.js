@@ -11,8 +11,8 @@ SalesRouter.get('/sales', salesControllers.findAll);
 SalesRouter.get('/sales/:id', salesControllers.findbyId);
 SalesRouter.post(
   '/sales', 
-  validateInputProductIdMiddleware, 
   validateInputQuantityMiddleware, 
+  validateInputProductIdMiddleware, 
   validateProductExistsMiddleware,
   salesControllers.createSale,
 );
