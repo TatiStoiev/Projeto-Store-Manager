@@ -1,5 +1,7 @@
 const express = require('express');
 const { productsControlers } = require('../controllers/index');
+const { validateInputNameMiddleware, validateNameLengthMiddleware, 
+  validateProductMiddleware } = require('../middlewares/validateInputMiddlewareForProducts');
 
 const ProductsRouter = express.Router();
 
@@ -9,6 +11,12 @@ ProductsRouter.get('/products/:id', productsControlers.findbyId);
 
 ProductsRouter.post('/products', productsControlers.createProduct);
 
-ProductsRouter.put('/products/:id', productsControlers.updateProduct);
+ProductsRouter.put(
+  '/products/:id',
+  validateInputNameMiddleware,
+  validateNameLengthMiddleware,
+  validateProductMiddleware,
+  productsControlers.updateProduct,
+);
 
 module.exports = ProductsRouter;
