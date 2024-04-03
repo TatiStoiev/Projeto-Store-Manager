@@ -30,11 +30,7 @@ const productIdValidation = async (array) => {
   const validationPromises = array.map(({ productId }) => salesModel.findById(productId));
   const products = await Promise.all(validationPromises);
   const productNotFound = products.some((product) => !product);
-  if (productNotFound) {
-    return false; 
-  } else {
-  return true;
-  }
+ return !productNotFound;
 };
 
 const validateProductExistsMiddleware = async (req, res, next) => {
