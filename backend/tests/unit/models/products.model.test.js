@@ -21,6 +21,11 @@ const productsMock = [
 
 const idMock = { id: 3, name: 'Escudo do CapitÃ£o AmÃ©rica' };
 const returnIdMock = { id: 3, name: 'Escudo do CapitÃ£o AmÃ©rica' };
+
+const updatedMock = {
+  id: 1,
+  name: 'Martelo do Batman',
+};
  
 describe('Products', function () {
   afterEach(function () {
@@ -72,5 +77,16 @@ describe('Products', function () {
 
     const id = await productsModel.createProduct(productName);
     expect(id).to.be.equal(4);    
+  });
+
+  it('Should update a product and return the id and name', async function () {
+    const productId = 1;
+    const productName = 'Martelo do Batman';
+    
+    sinon.stub(connection, 'execute')
+      .resolves(updatedMock);
+
+    const updatedProduct = await productsModel.updateProduct(productId, productName);
+    expect(updatedProduct).to.be.deep.equal(updatedMock);    
   });
 });
