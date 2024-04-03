@@ -1,6 +1,5 @@
 const { salesModel } = require('../models/index');
 const { salesServices } = require('../services/index');
-const middlewares = require('../middlewares/validateInputMiddleware');
 
 const findAll = async (req, res) => {
   const sales = await salesModel.findAll();
