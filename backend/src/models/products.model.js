@@ -26,13 +26,12 @@ const updateProduct = async (productId, name) => {
   WHERE p.id = ?`);
   const inputProductId = productId;
   const inputName = name;
-  const values = [inputProductId, inputName];
+  const values = [inputName, inputProductId];
   await connection.execute(query, values);
   const updatedProduct = {
     id: inputProductId,
     name: inputName,
   };
-  // console.log('retorno de updatedProduct', updatedProduct);
   return updatedProduct;
 };
 

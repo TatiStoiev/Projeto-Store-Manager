@@ -7,6 +7,36 @@ const { productsControlers } = require('../../../src/controllers/index');
 
 chai.use(sinonChai);
 
+const allProductMock = [
+  {
+    id: 1,
+    name: 'Martelo de Thor',
+  },
+  {
+    id: 2,
+    name: 'Traje de encolhimento',
+  },
+  {
+    id: 3,
+    name: 'Escudo do CapitÃ£o AmÃ©rica',
+  },
+];
+
+const returnFindByIdMock = {
+  id: 3,
+  name: 'Escudo do CapitÃ£o AmÃ©rica',
+};
+
+const newProductMock = {
+  id: 7,
+  name: 'Product X',
+};
+
+const updateMock = {
+  id: 1,
+  name: 'Martelo do Batman',
+};
+
 describe('Products controller', function () {
   describe('Find products', function () {
     afterEach(function () { return sinon.restore(); });
@@ -18,38 +48,12 @@ describe('Products controller', function () {
       };
 
       sinon.stub(productsModel, 'findAll')
-        .resolves([
-          {
-            id: 1,
-            name: 'Martelo de Thor',
-          },
-          {
-            id: 2,
-            name: 'Traje de encolhimento',
-          },
-          {
-            id: 3,
-            name: 'Escudo do CapitÃ£o AmÃ©rica',
-          },
-        ]);
+        .resolves(allProductMock);
   
       await productsControlers.findAll({}, res);     
          
       expect(res.status.calledWith(200)).to.be.equal(true);
-      expect(res.json.calledWith([
-        {
-          id: 1,
-          name: 'Martelo de Thor',
-        },
-        {
-          id: 2,
-          name: 'Traje de encolhimento',
-        },
-        {
-          id: 3,
-          name: 'Escudo do CapitÃ£o AmÃ©rica',
-        },
-      ]));      
+      expect(res.json.calledWith(allProductMock));      
     });
 
     it('Should return status 200 and the product json when find by id', async function () {
@@ -65,10 +69,7 @@ describe('Products controller', function () {
       };
 
       sinon.stub(productsModel, 'findById')
-        .resolves({
-          id: 3,
-          name: 'Escudo do CapitÃ£o AmÃ©rica',
-        });
+        .resolves(returnFindByIdMock);
 
       await productsControlers.findbyId(req, res);   
        
@@ -120,10 +121,30 @@ describe('Products controller', function () {
       await productsControlers.createProduct(req, res);   
        
       expect(res.status.calledWith(201)).to.be.equal(true);
-      expect(res.json.calledWith({
-        id: 7,
-        name: 'Product X',
-      })).to.be.equal(true);
+      expect(res.json.calledWith(newProductMock)).to.be.equal(true);
     });
+  });
+  it('Should update a product and return status 200 and a json with id and name of product', async function () {
+    const req = {
+      params: {
+        id: 1,
+      },
+      body: {
+        name: 'Martelo do Batman',
+      },
+    };   
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    sinon.stub(productsModel, 'updateProduct')
+      .resolves(updateMock);
+
+    await productsControlers.updateProduct(req, res);   
+     
+    expect(res.status.calledWith(200)).to.be.equal(true);
+    expect(res.json).calledWith(updateMock);
   });
 });

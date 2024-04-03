@@ -3,7 +3,7 @@ const { salesControllers } = require('../controllers/index');
 const { 
   validateInputProductIdMiddleware, 
   validateInputQuantityMiddleware, 
-  validateProductExistsMiddleware } = require('../middlewares/validateInputMiddleware');
+  validateProductExistsMiddleware } = require('../middlewares/validateInputMiddlewareforSales');
 
 const SalesRouter = express.Router();
 

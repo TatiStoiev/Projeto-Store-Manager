@@ -26,7 +26,6 @@ const findById = async (saleId) => {
   WHERE s.id = ?`;
   const value = [saleId];
   const [product] = await connection.execute(query, value);
-  console.log('retorno de product', product, saleId);
   return camelize(product);
 };
 

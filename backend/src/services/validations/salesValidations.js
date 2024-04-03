@@ -1,4 +1,4 @@
-const middlewares = require('../../middlewares/validateInputMiddleware');
+const middlewares = require('../../middlewares/validateInputMiddlewareforSales');
 
 const validations = async (array) => {
   await middlewares.validateInputProductIdMiddleware({ body: { array } }, null, () => {});
