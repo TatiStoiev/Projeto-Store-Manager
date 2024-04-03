@@ -19,4 +19,6 @@ ProductsRouter.put(
   productsControlers.updateProduct,
 );
 
+ProductsRouter.delete('/products/:id', validateProductMiddleware, productsControlers.deleteProduct);
+
 module.exports = ProductsRouter;
