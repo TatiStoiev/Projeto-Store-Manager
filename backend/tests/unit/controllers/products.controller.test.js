@@ -38,6 +38,7 @@ const updateMock = {
 };
 
 describe('Products controller', function () {
+  afterEach(function () { return sinon.restore(); });
   describe('Find products', function () {
     afterEach(function () { return sinon.restore(); });
 
@@ -102,7 +103,6 @@ describe('Products controller', function () {
     });
   });
   describe('Insert new products', function () {
-    afterEach(function () { return sinon.restore(); });
     it('Should retorn status 201 and a json with id and name of the new product', async function () {
       const req = {
         body: {
@@ -146,5 +146,43 @@ describe('Products controller', function () {
      
     expect(res.status.calledWith(200)).to.be.equal(true);
     expect(res.json).calledWith(updateMock);
+  });
+
+  it('Should delete a product and return status 204', async function () {
+    const req = {
+      params: {
+        id: 1,
+      },
+    };   
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    sinon.stub(productsModel, 'deleteProduct')
+      .resolves({ affectedRows: 1 });
+
+    await productsControlers.deleteProduct(req, res);   
+     
+    expect(res.status).to.be.calledWith(204);
+  });
+  it('Should call deleteProduct function with correct product ID', async function () {
+    const req = {
+      params: {
+        id: 1,
+      },
+    };
+  
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+  
+    const deleteProductStub = sinon.stub(productsModel, 'deleteProduct').resolves({ affectedRows: 1 });
+  
+    await productsControlers.deleteProduct(req, res);
+  
+    expect(deleteProductStub).to.be.calledWith(1);
   });
 });

@@ -89,4 +89,14 @@ describe('Products', function () {
     const updatedProduct = await productsModel.updateProduct(productId, productName);
     expect(updatedProduct).to.be.deep.equal(updatedMock);    
   });
+
+  it('Should delete a product', async function () {
+    const productId = 1;
+    
+    sinon.stub(connection, 'execute')
+      .resolves([{ affectedRows: 1 }]);
+
+    const affectedRows = await productsModel.deleteProduct(productId);
+    expect(affectedRows).to.equal(1);
+  });
 });
