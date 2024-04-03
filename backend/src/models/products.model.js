@@ -19,8 +19,26 @@ const createProduct = async (productName) => {
   return insertId;
 };
 
+const updateProduct = async (productId, name) => {
+  const query = (`UPDATE products p 
+  INNER JOIN sales_products sp ON sp.product_id = p.id
+  SET p.name = ?
+  WHERE p.id = ?`);
+  const inputProductId = productId;
+  const inputName = name;
+  const values = [inputProductId, inputName];
+  await connection.execute(query, values);
+  const updatedProduct = {
+    id: inputProductId,
+    name: inputName,
+  };
+  // console.log('retorno de updatedProduct', updatedProduct);
+  return updatedProduct;
+};
+
 module.exports = {
   findAll,
   findById,
   createProduct,
+  updateProduct,
 };

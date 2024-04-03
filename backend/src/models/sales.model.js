@@ -20,12 +20,13 @@ const findById = async (saleId) => {
   sp.product_id, 
   sp.quantity,
   s.date
-  FROM sales_products sp 
-  JOIN sales s 
+  FROM sales s 
+  JOIN sales_products sp 
   ON sp.sale_id = s.id 
   WHERE s.id = ?`;
   const value = [saleId];
   const [product] = await connection.execute(query, value);
+  console.log('retorno de product', product, saleId);
   return camelize(product);
 };
 

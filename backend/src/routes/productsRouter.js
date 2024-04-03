@@ -9,4 +9,6 @@ ProductsRouter.get('/products/:id', productsControlers.findbyId);
 
 ProductsRouter.post('/products', productsControlers.createProduct);
 
+ProductsRouter.put('products/:id', productsControlers.updateProduct);
+
 module.exports = ProductsRouter;
