@@ -11,8 +11,9 @@ const validateInputNameMiddleware = (req, res, next) => {
 
 const validateNameLengthMiddleware = (req, res, next) => {
   const { name } = req.body;
+  console.log('como chega o name para a validateName', name);
 
-  if (name.length >= 5) {
+  if (name.length < 5) {
     return res.status(422).json({ message: '"name" length must be at least 5 characters long' });
   }       
   next();
