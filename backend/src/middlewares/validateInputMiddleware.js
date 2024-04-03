@@ -29,15 +29,16 @@ const validateInputQuantityMiddleware = (req, res, next) => {
 const productIdValidation = async (array) => {
   const validationPromises = array.map(({ productId }) => salesModel.findById(productId));
   const products = await Promise.all(validationPromises);
+  // console.log('retorno de products', products);
   const productNotFound = products.some((product) => !product);
-  return !productNotFound;
+  return productNotFound;
 };
 
 const validateProductExistsMiddleware = async (req, res, next) => {
   const array = req.body;
 
   const productsExists = await productIdValidation(array);
-  console.log('retorno de productsExists', productsExists);
+  // console.log('retorno de productsExists', productsExists);
   if (!productsExists) {
     return res.status(404).json({ message: 'Product not found' });
   }
