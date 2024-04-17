@@ -16,5 +16,6 @@ SalesRouter.post(
   validateProductExistsMiddleware,
   salesControllers.createSale,
 );
+SalesRouter.delete('/sales/:id', salesControllers.deleteSale);
 
 module.exports = SalesRouter;
