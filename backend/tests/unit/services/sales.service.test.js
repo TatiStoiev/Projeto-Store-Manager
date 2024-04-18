@@ -28,6 +28,8 @@ const returnSaleCreated = {
     },
   ],
 };
+
+const saleIdMock = { id: 1 };
   
 describe('Sales', function () {
   afterEach(function () {
@@ -52,5 +54,14 @@ describe('Sales', function () {
     await salesServices.createSales(array);
 
     expect(insertSaleStub).to.be.calledOnceWith(array);
+  });
+
+  it('Should delete a sale', async function () {
+    sinon.stub(salesModel, 'deleteSale').resolves(1);
+    sinon.stub(connection, 'execute').resolves([{ rowsAffected: 1 }]);
+
+    const sale = await salesServices.deleteSale(saleIdMock);
+
+    expect(sale).to.be.equal(1);
   });
 });

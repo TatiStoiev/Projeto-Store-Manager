@@ -127,4 +127,14 @@ describe('Sales', function () {
     
     expect(sale).to.be.deep.equal(returnSaleCreated);
   });
+
+  it('Should delete a sale', async function () {
+    sinon.stub(salesModel, 'deleteSale').resolves(1);
+    sinon.stub(connection, 'execute')
+      .resolves([{ rowsAffected: 1 }]);
+
+    const sale = await salesModel.deleteSale(saleIdMock);
+
+    expect(sale).to.be.equal(1);
+  });
 });

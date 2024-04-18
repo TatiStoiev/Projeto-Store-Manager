@@ -8,6 +8,7 @@ const {
 const SalesRouter = express.Router();
 
 SalesRouter.get('/sales', salesControllers.findAll);
+SalesRouter.delete('/sales/:id', salesControllers.deleteSale);
 SalesRouter.get('/sales/:id', salesControllers.findbyId);
 SalesRouter.post(
   '/sales', 
@@ -16,6 +17,5 @@ SalesRouter.post(
   validateProductExistsMiddleware,
   salesControllers.createSale,
 );
-SalesRouter.delete('/sales/:id', salesControllers.deleteSale);
 
 module.exports = SalesRouter;
