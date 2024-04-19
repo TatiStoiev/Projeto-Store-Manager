@@ -59,10 +59,31 @@ const deleteSale = async (saleId) => {
   return affectedRows;
 };
 
+const updateSaleProduct = async (saleId, productId, quantity) => {
+  const updateQuery = `UPDATE sales_products 
+  SET quantity = ?
+  WHERE sale_id = ? AND product_id = ?`;
+  await connection.execute(updateQuery, [quantity, saleId, productId]);
+
+  const selectQuery = `SELECT s.date, sp.product_id, sp.quantity, sp.sale_id
+  FROM sales s
+  INNER JOIN sales_products sp ON  s.id = sp.sale_id
+  WHERE s.id = ? AND sp.product_id = ?`;
+  const [result] = await connection.execute(selectQuery, [saleId, productId]);
+  const updatedSaleProduct = {
+    date: result[0].date,
+    productId: result[0].product_id,
+    quantity: result[0].quantity,
+    saleId: result[0].sale_id,    
+  };
+  return updatedSaleProduct;
+};
+
 module.exports = {
   findAll,
   findById,
   getSaleId,
   insertSale,
   deleteSale,
+  updateSaleProduct,
 };
