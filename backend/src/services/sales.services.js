@@ -5,4 +5,9 @@ const createSales = async (array) => {
   return createSale;
 };
 
-module.exports = { createSales };
+const deleteSale = async (saleId) => {
+  const affectedRows = await salesModel.deleteSale(saleId);
+  return affectedRows;
+};
+
+module.exports = { createSales, deleteSale };

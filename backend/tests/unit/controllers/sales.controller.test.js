@@ -213,4 +213,33 @@ describe('Sales controller', function () {
       expect(res.json).to.be.calledWith(returnSaleCreated);
     });
   });
+  it('Should return status 204 when delete a sale', async function () {
+    const req = { params: { id: 1 } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    sinon.stub(salesModel, 'findById').resolves(mockId);
+    sinon.stub(salesServices, 'deleteSale').resolves(1);
+    
+    await salesControllers.deleteSale(req, res);
+
+    expect(res.status).to.be.calledWith(204);
+  });
+
+  it('Should return status 404 when try to delete a sale with an unexist id', async function () {
+    const req = { params: { id: 999 } };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    
+    sinon.stub(salesModel, 'findById').resolves(undefined);
+    
+    await salesControllers.deleteSale(req, res);
+
+    expect(res.status).to.be.calledWith(404);
+    expect(res.json).to.be.calledWith({ message: 'Sale not found' });
+  });
 });
