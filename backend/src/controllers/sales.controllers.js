@@ -27,7 +27,7 @@ const deleteSale = async (req, res) => {
   const saleId = Number(req.params.id);
 
   const saleIdExists = await salesModel.findById(saleId);
-  console.log('saleIdExist', saleIdExists)
+
   if (!saleIdExists || saleIdExists.length === 0) {
     return res.status(404).json({ message: 'Sale not found' });
   }
