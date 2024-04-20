@@ -47,4 +47,5 @@ module.exports = {
   validateInputProductIdMiddleware,
   validateInputQuantityMiddleware,
   validateProductExistsMiddleware,
+  productIdValidation,
 };

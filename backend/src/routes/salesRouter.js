@@ -4,6 +4,7 @@ const {
   validateInputProductIdMiddleware, 
   validateInputQuantityMiddleware, 
   validateProductExistsMiddleware } = require('../middlewares/validateInputMiddlewareforSales');
+const { validateQuantity } = require('../middlewares/validateUpdateProduct.middleware');
 
 const SalesRouter = express.Router();
 
@@ -16,6 +17,11 @@ SalesRouter.post(
   validateInputProductIdMiddleware, 
   validateProductExistsMiddleware,
   salesControllers.createSale,
+);
+SalesRouter.put(
+  '/sales/:saleId/products/:productId/quantity', 
+  validateQuantity,  
+  salesControllers.updateSale,
 );
 
 module.exports = SalesRouter;

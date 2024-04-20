@@ -30,6 +30,13 @@ const returnSaleCreated = {
 };
 
 const saleIdMock = { id: 1 };
+
+const updatedSale = {
+  date: '2023-05-06T03:14:28.000Z',
+  productId: 2,
+  quantity: 20,
+  saleId: 1,
+};
   
 describe('Sales', function () {
   afterEach(function () {
@@ -63,5 +70,17 @@ describe('Sales', function () {
     const sale = await salesServices.deleteSale(saleIdMock);
 
     expect(sale).to.be.equal(1);
+  });
+
+  it('Should update the quantity of a produts of a sale', async function () {
+    const saleId = 1;
+    const productId = 1;
+    const quantity = 2;
+    sinon.stub(salesModel, 'updateSaleProduct').resolves(updatedSale);
+    sinon.stub(connection, 'execute').resolves([{ rowsAffected: 1 }]);
+
+    const sale = await salesServices.updateSale(saleId, productId, quantity);
+
+    expect(sale).to.be.equal(updatedSale);
   });
 });

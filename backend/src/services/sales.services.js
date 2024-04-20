@@ -10,4 +10,8 @@ const deleteSale = async (saleId) => {
   return affectedRows;
 };
 
-module.exports = { createSales, deleteSale };
+const updateSale = async (saleId, productId, quantity) => {
+  const updatedSale = await salesModel.updateSaleProduct(saleId, productId, quantity);
+  return updatedSale;
+};
+module.exports = { createSales, deleteSale, updateSale };
