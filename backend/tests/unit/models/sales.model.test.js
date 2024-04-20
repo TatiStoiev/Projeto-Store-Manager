@@ -65,6 +65,13 @@ const returnSaleCreated = {
   ],
 };
 
+const updatedSale = {
+  date: '2023-05-06T03:14:28.000Z',
+  productId: 2,
+  quantity: 20,
+  saleId: 1,
+};
+
 describe('Sales', function () {
   afterEach(function () {
     sinon.restore();
@@ -136,5 +143,17 @@ describe('Sales', function () {
     const sale = await salesModel.deleteSale(saleIdMock);
 
     expect(sale).to.be.equal(1);
+  });
+
+  it('Should update a product of a sale', async function () {
+    const saleId = 1;
+    const productId = 1;
+    const quantity = 2;
+    sinon.stub(salesModel, 'updateSaleProduct').resolves(updatedSale);
+    sinon.stub(connection, 'execute')
+      .resolves([{ rowsAffected: 1 }]);
+
+    const result = await salesModel.updateSaleProduct(saleId, productId, quantity);
+    expect(result).to.be.equal(updatedSale);
   });
 });

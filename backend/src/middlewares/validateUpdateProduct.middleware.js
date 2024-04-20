@@ -5,7 +5,7 @@ const validateQuantity = (req, res, next) => {
     return res.status(400).json({ message: '"quantity" is required' });
   }
 
-  if (Number.isNaN(quantity) || quantity <= 0) {
+  if (Number.isNaN(parseFloat(quantity)) || parseFloat(quantity) <= 0) {
     return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' });
   }
 
